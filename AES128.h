@@ -2,14 +2,28 @@
 
 typedef unsigned char byte;
 
+
 class AES128
 {
 public:
-	AES128(void);
+	AES128();
 	~AES128(void);
 
-	void encrypt(byte key[4][4],byte pt[4][4]){
+	void encrypt(byte* keyPointer,byte* ptPointer) // accepts 16 byte long arrays and process into 4x4 matrices internally.
+	{
 	
+
+		byte key[4][4];
+		byte pt[4][4];
+		// assigning values into local two dimensional 4x4 arrays
+		for(int i=0;i<16;i++)
+		{
+			key[int(i/4)][i%4]= *(keyPointer+i*sizeof(byte));
+			pt[int(i/4)][i%4] = *(ptPointer+i*sizeof(byte));
+		}
+
+
+
 		/* pre-defined sbox taken from Cryptography and Network Security 5thE(2011) W.Stallings*/
 		byte sbox[16][16]={
 			{0x63,0x7c,0x77,0x7b,0xf2,0x6b,0x6f,0xc5,0x30,0x01,0x67,0x2b,0xfe,0xd7,0xab,0x76},
@@ -29,11 +43,36 @@ public:
 			{0xE1,0xF8,0x98,0x11,0x69,0xD9,0x8E,0x94,0x9B,0x1E,0x87,0xE9,0xCE,0x55,0x28,0xDF},
 			{0x8C,0xA1,0x89,0x0D,0xBF,0xE6,0x42,0x68,0x41,0x99,0x2D,0x0F,0xB0,0x54,0xBB,0x16} 
 		}; // in hexadecimal
-		
-	
-	}
 
-	void decrypt(byte key[4][4],byte ct[4][4]);
+
+		/*
+		key expansion process. 
+		
+		1. 16 byte long key is expanded into a 176 (16* 11 rounds)bytes long key
+		2. a slot of 4 bytes is considered as a 'word'. 
+		3. AES128 implemets 10 rounds
+		
+		*/
+
+		// key expansion begins
+		byte expandedKey[11][4][4];
+		
+		for(int round=0;round<=10;round++){
+		
+		
+		}
+	
+	} 
+	
+	
+	
+	void decrypt(byte* keyPointer,byte* ctPointer);
+
+
+	
+
+
+
 	
 	
 };
